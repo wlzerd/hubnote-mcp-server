@@ -1,0 +1,39 @@
+# Smithery (https://smithery.ai) registration metadata.
+#
+# Smithery는 MCP server marketplace이며, 이 파일이 있으면 GitHub
+# 저장소 링크 제출 시 자동으로 1-click install 페이지를 생성합니다.
+#
+# 사용자 셋업 흐름:
+#   1. https://smithery.ai/server/@hubnote-mcp/server 방문
+#   2. "API Key" 입력 (hubNote 계정 설정에서 발급한 hbn_... 키)
+#   3. Claude Desktop / Cursor 자동 설치 명령 복사
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - hubnoteApiKey
+    properties:
+      hubnoteApiKey:
+        type: string
+        title: hubNote API Key
+        description: >-
+          개인 API 키. https://notion.discof.com 의 계정 설정 →
+          "API 키" 탭에서 발급받으세요. `hbn_` 로 시작합니다.
+      hubnoteUrl:
+        type: string
+        title: hubNote URL
+        description: >-
+          기본값은 공식 인스턴스 (https://notion.discof.com).
+          self-host 한 다른 도메인을 사용할 때만 변경.
+        default: https://notion.discof.com
+  commandFunction: |-
+    (config) => ({
+      command: 'npx',
+      args: ['-y', '@hubnote-mcp/server'],
+      env: {
+        HUBNOTE_API_KEY: config.hubnoteApiKey,
+        HUBNOTE_URL: config.hubnoteUrl ?? 'https://notion.discof.com',
+      },
+    })
