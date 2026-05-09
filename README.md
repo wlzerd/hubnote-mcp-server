@@ -33,6 +33,54 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`
 Restart Claude Desktop. The hubNote tools should appear in the tool
 picker.
 
+### Cursor
+
+Settings → Cursor Settings → MCP, or edit `~/.cursor/mcp.json` directly:
+
+```json
+{
+  "mcpServers": {
+    "hubnote": {
+      "command": "npx",
+      "args": ["-y", "@hubnote-mcp/server"],
+      "env": { "HUBNOTE_API_KEY": "hbn_..." }
+    }
+  }
+}
+```
+
+### Codex (CLI / IDE extension)
+
+OpenAI Codex uses a TOML config file at `~/.codex/config.toml`. Easiest
+way is the CLI:
+
+```bash
+codex mcp add hubnote \
+  --env HUBNOTE_API_KEY=hbn_yourkeyhere \
+  -- npx -y @hubnote-mcp/server
+```
+
+Or edit the TOML directly:
+
+```toml
+[mcp_servers.hubnote]
+command = "npx"
+args = ["-y", "@hubnote-mcp/server"]
+
+[mcp_servers.hubnote.env]
+HUBNOTE_API_KEY = "hbn_yourkeyhere"
+```
+
+The CLI and IDE extension share the same configuration.
+
+### ChatGPT (not supported in v1)
+
+ChatGPT (desktop and web) only accepts **remote** MCP servers (HTTPS URL
++ OAuth) via Settings → Connectors. This package is **stdio-only**, so
+direct ChatGPT setup is not currently possible. A future release will
+add a remote server endpoint for ChatGPT / claude.ai web. For now use
+Claude Desktop / Cursor / Codex.
+
 ### Get an API Key
 
 1. Sign in to https://notion.discof.com
